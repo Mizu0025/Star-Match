@@ -58,6 +58,20 @@ const Game = props => {
     return 'available';
   };
 
+  // const starColour = 'red';
+
+  // const setStarColour = (secondsLeft) => {
+  //   if(secondsLeft < 3)
+  //   {
+  //     return 'red';
+  //   }
+  //   else if(secondsLeft < 6)
+  //   {
+  //     return 'yellow';
+  //   }
+  //   return 'green';
+  // };
+
   const onNumberClick = (number, currentStatus) => {
     if (gameStatus !== 'active' || currentStatus === 'used') {
       return;
@@ -81,7 +95,7 @@ const Game = props => {
           {gameStatus !== 'active' ? (
             <PlayAgain onClick={props.startNewGame} gameStatus={gameStatus} />
           ) : (
-            <StarsDisplay count={stars} />
+            <StarsDisplay count={stars} colour={starColour} />
           )}
         </div>
         <div className="right">
