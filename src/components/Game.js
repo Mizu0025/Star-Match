@@ -9,12 +9,34 @@ const useGameState = () => {
   const [availableNums, setAvailableNums] = useState(utils.range(1, 9));
   const [candidateNums, setCandidateNums] = useState([]);
   const [secondsLeft, setSecondsLeft] = useState(10);
+  const [starShade, setStarShade] = useState([starColourCalculator(secondsLeft)]);
+
+  const starColour = {
+
+    twinkleColour: {
+      color: starShade,
+    },
+  };
+
+  function starColourCalculator(secondsLeft) {
+    if(secondsLeft > 6)
+    {
+      return 'green';
+    }
+    else if(secondsLeft > 3)
+    {
+      return 'orange';
+    }
+    return 'red';
+  }
 
   useEffect(() => {
     if (secondsLeft > 0 && availableNums.length > 0) {
       const timerId = setTimeout(() => {
         setSecondsLeft(secondsLeft - 1);
+        setStarShade(starColourCalculator(secondsLeft));
       }, 1000);
+
       return () => clearTimeout(timerId);
     }
   });
@@ -32,12 +54,13 @@ const useGameState = () => {
     }
   };
 
-  return { stars, availableNums, candidateNums, secondsLeft, setGameState };
+  return { stars, starColour, availableNums, candidateNums, secondsLeft, setGameState };
 };
 
 const Game = props => {
   const {
     stars,
+    starColour,
     availableNums,
     candidateNums,
     secondsLeft,
@@ -57,20 +80,6 @@ const Game = props => {
     }
     return 'available';
   };
-
-  // const starColour = 'red';
-
-  // const setStarColour = (secondsLeft) => {
-  //   if(secondsLeft < 3)
-  //   {
-  //     return 'red';
-  //   }
-  //   else if(secondsLeft < 6)
-  //   {
-  //     return 'yellow';
-  //   }
-  //   return 'green';
-  // };
 
   const onNumberClick = (number, currentStatus) => {
     if (gameStatus !== 'active' || currentStatus === 'used') {
@@ -95,7 +104,7 @@ const Game = props => {
           {gameStatus !== 'active' ? (
             <PlayAgain onClick={props.startNewGame} gameStatus={gameStatus} />
           ) : (
-            <StarsDisplay count={stars} colour={starColour} />
+            <StarsDisplay count={stars} colour={starColour.twinkleColour} />
           )}
         </div>
         <div className="right">
